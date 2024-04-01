@@ -53,13 +53,15 @@ Statyczna biblioteka littlefs.
 %build
 libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c lfs.c -o lfs.lo
 libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c lfs_util.c -o lfs_util.lo
-libtool --mode=link %{__cc} %{!?with_static_libs:-shared} %{rpmldflags} %{rpmcflags} -o liblfs.la lfs.lo lfs_util.lo -rpath %{_libdir}
+libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c bd/lfs_filebd.c -o lfs_filebd.lo
+libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c bd/lfs_rambd.c -o lfs_rambd.lo
+libtool --mode=link %{__cc} %{!?with_static_libs:-shared} %{rpmldflags} %{rpmcflags} -o liblfs.la lfs.lo lfs_util.lo lfs_filebd.lo lfs_rambd.lo -rpath %{_libdir}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_includedir},%{_libdir}}
 
-cp -p lfs.h lfs_util.h $RPM_BUILD_ROOT%{_includedir}
+cp -p lfs.h lfs_util.h bd/lfs_filebd.h bd/lfs_rambd.h $RPM_BUILD_ROOT%{_includedir}
 
 libtool --mode=install install liblfs.la $RPM_BUILD_ROOT%{_libdir}
 
@@ -82,6 +84,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblfs.so
 %{_includedir}/lfs.h
+%{_includedir}/lfs_filebd.h
+%{_includedir}/lfs_rambd.h
 %{_includedir}/lfs_util.h
 
 %if %{with static_libs}

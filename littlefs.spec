@@ -53,8 +53,8 @@ Statyczna biblioteka littlefs.
 %build
 libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c lfs.c -o lfs.lo
 libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c lfs_util.c -o lfs_util.lo
-libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c bd/lfs_filebd.c -o lfs_filebd.lo
-libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c bd/lfs_rambd.c -o lfs_rambd.lo
+libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c bd/lfs_filebd.c -o lfs_filebd.lo -I.
+libtool --mode=compile %{__cc} %{rpmcflags} %{rpmcppflags} -Wall -Wextra -pedantic -Wmissing-prototypes -c bd/lfs_rambd.c -o lfs_rambd.lo -I.
 libtool --mode=link %{__cc} %{!?with_static_libs:-shared} %{rpmldflags} %{rpmcflags} -o liblfs.la lfs.lo lfs_util.lo lfs_filebd.lo lfs_rambd.lo -rpath %{_libdir}
 
 %install
